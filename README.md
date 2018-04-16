@@ -14,7 +14,7 @@ This project includes three Dockerfiles:
 
 ### Companion articles
 
-This project is intended for use with the following Azure Container Registry articles on [docs.microsoft.com](http://docs.microsoft.com):
+This project is intended for use with the following articles on [docs.microsoft.com](http://docs.microsoft.com):
 
 * [Build container images in the cloud with Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-quick-build)
 * [Automate container image builds with Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-build-task)
