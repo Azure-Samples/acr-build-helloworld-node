@@ -22,7 +22,7 @@ This project is intended for use with the following Azure Container Registry art
 
 ### Quickstart
 
-Although intended for use with the companion articles, you can perform the following steps run the sample application (requires a local [Docker](http://docker.com) installation).
+Although intended for use with the companion articles, you can perform the following steps to run the sample application. These steps require a local [Docker](http://docker.com) installation.
 
 1. `git clone https://github.com/Azure-Samples/acr-build-helloworld-node`
 1. `cd acr-build-helloworld-node`
