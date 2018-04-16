@@ -1,57 +1,37 @@
-# Project Name
+# ACR Build Hello World
 
-(short, 1-3 sentenced, description of the project)
+This Node.js application is for use in demonstrating [Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-quick-build) (ACR Build), a suite of features within [Azure Container Registry](https://azure.microsoft.com/services/container-registry/) for performing Docker container builds on [Azure](https://azure.com).
 
 ## Features
 
-This project framework provides the following features:
+This project includes three Dockerfiles:
 
-* Feature 1
-* Feature 2
-* ...
+* *Dockerfile* - Non-parameterized Dockerfile for building the application. References a base image in Docker Hub.
+* *Dockerfile-app* - Parameterized, accepts the `REGISTRY_NAME` argument to specify the FQDN of the container registry from which the base image is pulled.
+* *Dockerfile-base* - Defines a base image for the application defined in *Dockerfile-app*.
 
 ## Getting Started
 
-### Prerequisites
+### Companion articles
 
-(ideally very short, if any)
+This project is intended for use with the following articles on [docs.microsoft.com](http://docs.microsoft.com):
 
-- OS
-- Library version
-- ...
-
-### Installation
-
-(ideally very short)
-
-- npm install [package name]
-- mvn install
-- ...
+* [Build container images in the cloud with Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-quick-build)
+* [Automate container image builds with Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-build-task)
+* [Automate image builds on base image update with Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-base-image-update)
 
 ### Quickstart
-(Add steps to get up and running quickly)
 
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
+Although intended for use with the companion articles, you can perform the following steps to run the sample application. These steps require a local [Docker](http://docker.com) installation.
 
-
-## Demo
-
-A demo app is included to show how to use the project.
-
-To run the demo, follow these steps:
-
-(Add steps to start up the demo)
-
-1.
-2.
-3.
+1. `git clone https://github.com/Azure-Samples/acr-build-helloworld-node`
+1. `cd acr-build-helloworld-node`
+1. `docker build -t helloacrbuild:v1 .`
+1. `docker run -d -p 5000:5000 helloacrbuild:v1`
+1. Navigate to http://localhost:5000 to view the running application
 
 ## Resources
 
-(Any additional resources or related projects)
+[Azure Container Registry](https://azure.microsoft.com/services/container-registry/)
 
-- Link to supporting information
-- Link to similar sample
-- ...
+[Azure Container Registry documentation](https://docs.microsoft.com/azure/container-registry/)
