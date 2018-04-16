@@ -1,26 +1,28 @@
 # ACR Build Hello World
 
-This Node.js application is for use in demonstrating Azure Container Registry Build (ACR Build), a suite of features within Azure Container Registry for performing Docker container builds in the cloud.
+This Node.js application is for use in demonstrating [Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-quick-build) (ACR Build), a suite of features within [Azure Container Registry](https://azure.microsoft.com/services/container-registry/) for performing Docker container builds on [Azure](https://azure.com).
 
 ## Features
 
-This project includes three Dockerfiles:
+This project includes three Dockerfiles.
 
-* Dockerfile - Non-parameterized Dockerfile for building the application. References a base image in Docker Hub.
-* appDockerfile - Parameterized, accepts the `REGISTRY_NAME` argument to specify the FQDN of the container registry from which the base image is pulled.
-* baseDockerfile - Defines the base image for the application defined in *appDockerfile*.
+* *Dockerfile* - Non-parameterized Dockerfile for building the application. References a base image in Docker Hub.
+* *appDockerfile* - Parameterized, accepts the `REGISTRY_NAME` argument to specify the FQDN of the container registry from which the base image is pulled.
+* *baseDockerfile* - Defines a base image for the application defined in *appDockerfile*.
 
 ## Getting Started
 
-### Prerequisites
+### Companion articles
 
-This project is for use with the following Azure Container Registry articles:
+This project is intended for use with the following Azure Container Registry articles on [docs.microsoft.com](http://docs.microsoft.com):
 
 * [Build container images in the cloud with Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-quick-build)
 * [Automate container image builds with Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-build-task)
 * [Automate image builds on base image update with Azure Container Registry Build](https://docs.microsoft.com/azure/container-registry/container-registry-tutorial-base-image-update)
 
 ### Quickstart
+
+Although intended for use with the companion articles, you can perform the following steps run the sample application (requires a local [Docker](http://docker.com) installation).
 
 1. `git clone https://github.com/Azure-Samples/acr-build-helloworld-node`
 1. `cd acr-build-helloworld-node`
