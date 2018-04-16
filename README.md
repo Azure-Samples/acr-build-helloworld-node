@@ -4,11 +4,11 @@ This Node.js application is for use in demonstrating [Azure Container Registry B
 
 ## Features
 
-This project includes three Dockerfiles.
+This project includes three Dockerfiles:
 
 * *Dockerfile* - Non-parameterized Dockerfile for building the application. References a base image in Docker Hub.
-* *appDockerfile* - Parameterized, accepts the `REGISTRY_NAME` argument to specify the FQDN of the container registry from which the base image is pulled.
-* *baseDockerfile* - Defines a base image for the application defined in *appDockerfile*.
+* *Dockerfile-app* - Parameterized, accepts the `REGISTRY_NAME` argument to specify the FQDN of the container registry from which the base image is pulled.
+* *Dockerfile-base* - Defines a base image for the application defined in *appDockerfile*.
 
 ## Getting Started
 
