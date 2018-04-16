@@ -2,5 +2,5 @@ FROM node:9
 
 COPY . /src
 RUN cd /src && npm install
-EXPOSE 5000
+EXPOSE 80
 CMD ["node", "/src/server.js"]

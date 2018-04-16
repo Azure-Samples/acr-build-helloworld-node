@@ -27,8 +27,8 @@ Although intended for use with the companion articles, you can perform the follo
 1. `git clone https://github.com/Azure-Samples/acr-build-helloworld-node`
 1. `cd acr-build-helloworld-node`
 1. `docker build -t helloacrbuild:v1 .`
-1. `docker run -d -p 5000:5000 helloacrbuild:v1`
-1. Navigate to http://localhost:5000 to view the running application
+1. `docker run -d -p 8080:80 helloacrbuild:v1`
+1. Navigate to http://localhost:8080 to view the running application
 
 ## Resources
 
