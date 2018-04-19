@@ -1,4 +1,4 @@
-FROM node:9
+FROM node:9-alpine
 
 COPY . /src
 RUN cd /src && npm install
