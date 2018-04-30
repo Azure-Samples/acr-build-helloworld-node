@@ -14,13 +14,11 @@ This project includes three Dockerfiles:
 
 ### Companion articles
 
-This project is intended for use with the following forthcoming articles on [docs.microsoft.com][docs]:
+This project is intended for use with the following articles on [docs.microsoft.com][docs]:
 
-> NOTE: These articles are currently in progress, but are not yet published. Links will be enabled as soon as they're live on [docs.microsoft.com][docs].
-
-* Build container images in the cloud with Azure Container Registry Build
-* Automate container image builds with Azure Container Registry Build
-* Automate image builds on base image update with Azure Container Registry Build
+* [Build container images in the cloud with Azure Container Registry Build][build-quick]
+* [Automate container image builds with Azure Container Registry Build][build-task]
+* [Automate image builds on base image update with Azure Container Registry Build][build-base]
 
 ### Quickstart
 
