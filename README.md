@@ -10,6 +10,10 @@ This project includes three Dockerfiles:
 * *Dockerfile-app* - Parameterized, accepts the `REGISTRY_NAME` argument to specify the FQDN of the container registry from which the base image is pulled.
 * *Dockerfile-base* - Defines a base image for the application defined in *Dockerfile-app*.
 
+This project includes one Task file:
+
+* *acb.yaml* - A simple Task file which performs the same logic as a `docker build` using the aforementioned Dockerfiles.
+
 ## Getting Started
 
 ### Companion articles
