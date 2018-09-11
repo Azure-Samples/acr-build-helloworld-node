@@ -1,0 +1,2 @@
+steps:
+  - build: . -t acr-build-helloworld-node:{{.Run.ID}}
