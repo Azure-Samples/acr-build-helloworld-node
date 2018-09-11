@@ -1,0 +1,4 @@
+# This is an example of ACR's Task functionality.
+# It performs the equivalent of a `docker build -f Dockerfile .`
+steps:
+  - build: . -t acr-build-helloworld-node:{{.Run.ID}}
