@@ -27,8 +27,6 @@ stages:
     displayName: Build
     pool:
       vmImage: $(vmImageName)
-    variables:
-      REGISTRY_NAME: danlep0820.azurecr.io
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
@@ -39,3 +37,4 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+        arguments: REGISTRY_NAME=danlep0820.azurecr.io
