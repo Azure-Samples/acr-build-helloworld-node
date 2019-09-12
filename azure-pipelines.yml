@@ -37,4 +37,3 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-        arguments: REGISTRY_NAME=danlep0820.azurecr.io
