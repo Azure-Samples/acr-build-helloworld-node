@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: 'd7e8bc21-33b4-4f38-9981-12d614f5618b'
   imageRepository: 'dlepowacrbuildhelloworldnode'
   containerRegistry: 'danlep0820.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile-app'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
   
   # Agent VM image name
