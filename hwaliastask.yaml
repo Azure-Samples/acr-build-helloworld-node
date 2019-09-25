@@ -1,0 +1,8 @@
+version: v1.1.0
+alias:
+  values:
+    repo: myrepo
+steps:
+  - build: -t $Registry/$repo:$ID  -t $Registry/hello-world:$ID -f Dockerfile .
+  - push: 
+    - $Registry/hello-world:$ID
