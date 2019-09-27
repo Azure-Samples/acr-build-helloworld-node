@@ -1,0 +1,5 @@
+- uses: azure/k8s-actions/k8s-set-context@master
+  with:
+    k8s-url: https://bitbucket-bugbash-aks-2-dns-58411f45.hcp.southeastasia.azmk8s.io:443
+    k8s-secret: ${{ secrets.TOKEN }}
+  id: login
