@@ -19,7 +19,6 @@ jobs:
         
     - uses: azure/k8s-actions/k8s-create-secret@master
       with:
-        namespace: aksfixbitbucketb6d7
         container-registry-url: https://anuragacr.azurecr.io
         container-registry-username: ${{ secrets.REGISTRY_USERNAME  }}
         container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
