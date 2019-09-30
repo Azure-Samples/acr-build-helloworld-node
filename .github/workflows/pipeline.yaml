@@ -3,6 +3,7 @@ on: push
 jobs:
     my_first_job:
       name: My Job
+      runs-on: ubuntu-latest
       steps:
         - uses: azure/k8s-actions/k8s-set-context@master
           with:
