@@ -1,12 +1,41 @@
-name: Greeting from Anurag
-on: push
+on: [push]
+
 jobs:
-    my_first_job:
-      name: My Job
-      runs-on: ubuntu-latest
-      steps:
-        - uses: azure/k8s-actions/k8s-set-context@master
-          with:
-            k8s-url: https://bitbucket-bugbash-aks-2-dns-58411f45.hcp.southeastasia.azmk8s.io:443
-            k8s-secret: ${{ secrets.TOKEN }}
-          id: login
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/k8s-actions/docker-login@master
+      with:
+        login-server: anuragacr.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - run: |
+        docker build . -t anuragacr.azurecr.io/k8sdemo:${{ github.sha }}
+        docker push anuragacr.azurecr.io/k8sdemo:${{ github.sha }}
+      
+    # Set the target AKS cluster. 
+   - uses: azure/k8s-actions/k8s-set-context@master
+     with:
+         k8s-url: https://bitbucket-bugbash-aks-2-dns-58411f45.hcp.southeastasia.azmk8s.io:443
+         k8s-secret: ${{ secrets.TOKEN }}
+     id: login
+        
+    - uses: azure/k8s-actions/k8s-create-secret@master
+      with:
+        container-registry-url: anuragacr.azurecr.io
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        secret-name: demo-k8s-secret
+
+    - uses: azure/k8s-actions/k8s-deploy@master
+      with:
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          demo.azurecr.io/k8sdemo:${{ github.sha }}
+        imagepullsecrets: |
+          demo-k8s-secret
