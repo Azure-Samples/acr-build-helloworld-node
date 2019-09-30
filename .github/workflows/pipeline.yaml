@@ -25,6 +25,6 @@ jobs:
     - uses: azure/k8s-actions/k8s-create-secret@master
       with:
         container-registry-url: anuragacr.azurecr.io
-        container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME  }}
         container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         secret-name: demo-k8s-secret
