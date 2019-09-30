@@ -1,3 +1,5 @@
+name: Greeting from Anurag
+on: push
 jobs:
     my_first_job:
       name: My Job
