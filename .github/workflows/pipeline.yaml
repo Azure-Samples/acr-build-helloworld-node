@@ -13,5 +13,5 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: |
-        docker build . -t anuragacr.azurecr.io/k8sdemo
-        docker push anuragacr.azurecr.io/k8sdemo
+        docker build . -t anuragacr.azurecr.io/k8sdemo:${{ github.sha }}
+        docker push anuragacr.azurecr.io/k8sdemo:${{ github.sha }}
