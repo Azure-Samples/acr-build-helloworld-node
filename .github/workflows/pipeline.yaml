@@ -4,6 +4,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/k8s-actions/docker-login@master
+      with:
+        login-server: anuragacr.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - run: |
+        docker build . -t anuragacr.azurecr.io/k8sdemo:${{ github.sha }}
+        docker push anuragacr.azurecr.io/k8sdemo:${{ github.sha }}
+    
     - uses: azure/k8s-actions/k8s-set-context@master
       with:
          kubeconfig: ${{ secrets.KUBE_CONFIG }}
