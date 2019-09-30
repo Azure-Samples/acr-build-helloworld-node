@@ -13,8 +13,8 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: |
-        docker build . -t anuragacr.azurecr.io/k8sdemo:${{ github.sha }}
-        docker push anuragacr.azurecr.io/k8sdemo:${{ github.sha }}
+        docker build . -t anuragacr.azurecr.io/demo:${{ github.sha }}
+        docker push anuragacr.azurecr.io/demo:${{ github.sha }}
     
     - uses: azure/k8s-actions/k8s-set-context@master
       with:
@@ -35,6 +35,6 @@ jobs:
           manifests/deployment.yml
           manifests/service.yml
         images: |
-          anuragacr.azurecr.io/k8sdemo
+          anuragacr.azurecr.io/demo
         imagepullsecrets: |
           demo-k8s-secret
