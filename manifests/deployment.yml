@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: anuragcacrbuildhelloworldnode 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: anuragcacrbuildhelloworldnode 
+    spec:
+      containers:
+        - name: anuragcacrbuildhelloworldnode 
+          image: anurag6acr.azurecr.io/anuragcacrbuildhelloworldnode 
+          ports:
+          - containerPort: 80
