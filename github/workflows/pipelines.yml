@@ -1,0 +1,40 @@
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/k8s-actions/docker-login@master
+      with:
+        login-server: anurag4acr.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME8bc8 }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - run: |
+        docker build . -t anurag4acr.azurecr.io/bugbash16718dca:${{ github.sha }}
+        docker push anurag4acr.azurecr.io/bugbash16718dca:${{ github.sha }}
+    
+    - uses: azure/k8s-actions/k8s-set-context@master
+      with:
+         kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      id: login
+        
+    - uses: azure/k8s-actions/k8s-create-secret@master
+      with:
+        namespace: bugbash16714317
+        container-registry-url: anurag4acr.azurecr.io
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME8bc8 }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        secret-name: dockerAuthSecret
+       
+    - uses: azure/k8s-actions/k8s-deploy@master
+      with:
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          anurag4acr.azurecr.io/bugbash16718dca:${{ github.sha }}
+        imagepullsecrets: |
+          dockerAuthSecret
