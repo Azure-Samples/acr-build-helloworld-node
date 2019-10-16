@@ -29,6 +29,7 @@ jobs:
         container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
         container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         secret-name: demo-k8s-secret
+        secret-type: docker-registry
        
     - uses: azure/k8s-actions/k8s-deploy@master
       with:
