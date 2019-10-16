@@ -23,7 +23,7 @@ jobs:
         
     - uses: azure/k8s-actions/k8s-create-secret@master
       with:
-        namespace: aksfixbitbucketb6d7
+        namespace: anuragaksprod1181
         container-registry-url: anuragacr.azurecr.io
         container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
         container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
@@ -31,6 +31,7 @@ jobs:
        
     - uses: azure/k8s-actions/k8s-deploy@master
       with:
+        namespace: anuragaksprod1181
         manifests: |
           manifests/deployment.yml
           manifests/service.yml
