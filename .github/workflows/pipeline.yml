@@ -18,7 +18,8 @@ jobs:
     
     - uses: azure/k8s-actions/k8s-set-context@master
       with:
-         kubeconfig: ${{ secrets.KUBE_CONFIG }}
+         K8s-url: https://bugbash167-1-dns-636d78db.hcp.centralus.azmk8s.io:443
+         k8s-secrets: ${{ secrets.TOKEN }}
       id: login
         
     - uses: azure/k8s-actions/k8s-create-secret@master
