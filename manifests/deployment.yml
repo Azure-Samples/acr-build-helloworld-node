@@ -2,6 +2,7 @@ apiVersion : apps/v1beta1
 kind: Deployment
 metadata:
   name: anuragcacrbuildhelloworldnode 
+  namespace: anuragaksprod1181
 spec:
   replicas: 1
   template:
