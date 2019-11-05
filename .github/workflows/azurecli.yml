@@ -1,0 +1,21 @@
+on: [push]
+
+name: Azure/CLI - the actual repo
+
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.SPN }}
+
+    - name: Azure cli
+      uses: azure/CLI@v0-beta
+      with:
+        azcliversion: 2.0.68
+        inlineScript: |
+          az account show
+          az storage -h
