@@ -12,4 +12,5 @@ jobs:
     
     - name:  create namespace
       run: |
-        kubectl get namespaces
+        kubectl create namespace anurag
+        kubectl get namespace
