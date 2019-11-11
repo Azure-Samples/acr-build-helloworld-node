@@ -1,0 +1,15 @@
+on: [push]
+
+name: Namespace
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: azure/k8s-set-context@v1
+      with:
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+    
+    - name:  create namespace
+      run: |
+        kubectl get namespaces
