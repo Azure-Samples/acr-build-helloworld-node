@@ -1,0 +1,43 @@
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/containers-actions/docker-login@master
+      with:
+        login-server: anuragcontainerwebappacr.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME-d22b }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - run: |
+        docker build . -t anuragcontainerwebappacr.azurecr.io/anchauhakscluster78e7:${{ github.sha }}
+        docker push anuragcontainerwebappacr.azurecr.io/anchauhakscluster78e7:${{ github.sha }}
+    
+    - uses: azure/k8s-actions/k8s-set-context@master
+      with:
+         kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      id: login
+    
+    - name:  create namespace
+      run: |
+        kubectl create namespace anchauhaksclustere839
+
+    - uses: azure/k8s-actions/k8s-create-secret@master
+      with:
+        namespace: anchauhaksclustere839
+        container-registry-url: anuragcontainerwebappacr.azurecr.io
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME-d22b }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        secret-name: dockerAuthSecret
+       
+    - uses: azure/k8s-actions/k8s-deploy@master
+      with:
+        manifests: |
+          manifests/deployment-3.yml
+          manifests/service-3.yml
+        images: |
+          anuragcontainerwebappacr.azurecr.io/anchauhakscluster78e7:${{ github.sha }}
+        imagepullsecrets: |
+          dockerAuthSecret
