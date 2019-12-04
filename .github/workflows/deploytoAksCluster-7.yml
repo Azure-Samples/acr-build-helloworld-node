@@ -35,6 +35,6 @@ jobs:
           manifests/deployment-10.yml
           manifests/service-10.yml
         images: |
-          anuragcontainerwebappacr.azurecr.io/anchauhaksclustered2f:$GITHUB_SHA
+          anuragcontainerwebappacr.azurecr.io/anchauhaksclustered2f:${{ github.sha }}
         imagepullsecrets: |
           dockerAuthSecret
