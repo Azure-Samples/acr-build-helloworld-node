@@ -9,7 +9,7 @@ jobs:
       with:
         login-server: anuragcontainerwebappacr.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME_7055 }}
-        password: ${{ secrets.REGISTRY_USERNAME_c81b }}
+        password: ${{ secrets.REGISTRY_PASSWORD_c81b }}
     
     - run: |
         docker build . -t anuragcontainerwebappacr.azurecr.io/anchauhaksclustered2f:$GITHUB_SHA
@@ -29,7 +29,7 @@ jobs:
         namespace: anchauhakscluster2477
         container-registry-url: anuragcontainerwebappacr.azurecr.io
         container-registry-username: ${{ secrets.REGISTRY_USERNAME_7055 }}
-        container-registry-password: ${{ secrets.REGISTRY_USERNAME_c81b }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD_c81b }}
         secret-name: dockerAuthSecret
        
     - uses: azure/k8s-actions/k8s-deploy@master
