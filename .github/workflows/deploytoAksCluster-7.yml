@@ -19,10 +19,6 @@ jobs:
       with:
          kubeconfig: ${{ secrets.KUBE_CONFIG_ba00 }}
       id: login
-    
-    - name:  create namespace
-      run: |
-        kubectl create namespace anchauhakscluster2477
 
     - uses: azure/k8s-actions/k8s-create-secret@master
       with:
@@ -34,6 +30,7 @@ jobs:
        
     - uses: azure/k8s-actions/k8s-deploy@master
       with:
+        namespace: anchauhakscluster2477 
         manifests: |
           manifests/deployment-10.yml
           manifests/service-10.yml
