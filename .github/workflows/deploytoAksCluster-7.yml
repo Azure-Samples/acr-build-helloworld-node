@@ -15,7 +15,7 @@ jobs:
         docker build . -t anuragcontainerwebappacr.azurecr.io/anchauhaksclustered2f:$GITHUB_SHA
         docker push anuragcontainerwebappacr.azurecr.io/anchauhaksclustered2f:$GITHUB_SHA
     
-    - uses: azure/k8s-actions/k8s-set-context@master
+    - uses: azure/k8s-set-context@v1
       with:
          kubeconfig: ${{ secrets.KUBE_CONFIG_ba00 }}
       id: login
@@ -23,7 +23,7 @@ jobs:
     - run: |
         kubectl create namespace anchauhakscluster2477
 
-    - uses: azure/k8s-actions/k8s-create-secret@master
+    - uses: azure/k8s-create-secret@v1
       with:
         namespace: anchauhakscluster2477
         container-registry-url: anuragcontainerwebappacr.azurecr.io
@@ -31,7 +31,7 @@ jobs:
         container-registry-password: ${{ secrets.REGISTRY_PASSWORD_c81b }}
         secret-name: dockerauthsecret
        
-    - uses: azure/k8s-actions/k8s-deploy@master
+    - uses: Azure/k8s-deploy@v1
       with:
         namespace: anchauhakscluster2477 
         manifests: |
