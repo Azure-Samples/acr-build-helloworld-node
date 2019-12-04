@@ -20,6 +20,9 @@ jobs:
          kubeconfig: ${{ secrets.KUBE_CONFIG_ba00 }}
       id: login
 
+    - run: |
+        kubectl create namespace anchauhakscluster2477
+
     - uses: azure/k8s-actions/k8s-create-secret@master
       with:
         namespace: anchauhakscluster2477
@@ -37,4 +40,4 @@ jobs:
         images: |
           anuragcontainerwebappacr.azurecr.io/anchauhaksclustered2f:${{ github.sha }}
         imagepullsecrets: |
-          dockerAuthSecret
+          dockerauthsecret
