@@ -13,4 +13,4 @@ spec:
         - name: "anchauhakscluster"
           image: "anuragcontainerwebappacr.azurecr.io/anchauhaksclustered2f"
           ports:
-          - containerPort: "80"
+          - containerPort: 80
