@@ -24,7 +24,7 @@ jobs:
         namespacePresent=`kubectl get namespace | grep anchauhakscluster2477 | wc -l`
         if [ $namespacePresent -eq 0 ]
         then
-            echo `kubectl create namespace {{variables.namespace}}`
+            echo `kubectl create namespace anchauhakscluster2477`
         fi
 
     - uses: azure/k8s-create-secret@v1
