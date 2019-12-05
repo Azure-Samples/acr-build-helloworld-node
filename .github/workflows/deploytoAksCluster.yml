@@ -1,0 +1,44 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: anuragcontainerwebappacr.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME_8c54 }}
+        password: ${{ secrets.REGISTRY_PASSWORD_9e14 }}
+    
+    - run: |
+        docker build . -t anuragcontainerwebappacr.azurecr.io/anchauhakscluster6d3e:$GITHUB_SHA
+        docker push anuragcontainerwebappacr.azurecr.io/anchauhakscluster6d3e:$GITHUB_SHA
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.KUBE_CONFIG_9656 }}
+      id: login
+    
+    - name:  create namespace
+      run: |
+        kubectl create namespace anchauhaksclustere6d3
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: anchauhaksclustere6d3
+        container-registry-url: anuragcontainerwebappacr.azurecr.io
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME_8c54 }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD_9e14 }}
+        secret-name: anchauhakscldockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: anchauhaksclustere6d3
+        manifests: |
+          manifests/deployment-1.yml
+          manifests/service-12.yml
+        images: |
+          anuragcontainerwebappacr.azurecr.io/anchauhakscluster6d3e:$''
+        imagepullsecrets: |
+          anchauhakscldockerauth
