@@ -1,0 +1,48 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: anuragcontainerwebappacr.azurecr.io
+        username: ${{ secrets.acr_anuragContainerWebAppacr_username }}
+        password: ${{ secrets.acr_anuragContainerWebAppacr_password }}
+    
+    - run: |
+        docker build . -t anuragcontainerwebappacr.azurecr.io/anchauhakscluster32e2:${{ parts[0] }}
+        docker push anuragcontainerwebappacr.azurecr.io/anchauhakscluster32e2:${{ parts[0] }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_anchauhAksCluster_kubeConfig }}
+      id: login
+    
+    - name: create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep anchauhakscluster5cfb | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace anchauhakscluster5cfb`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: anchauhakscluster5cfb
+        container-registry-url: anuragcontainerwebappacr.azurecr.io
+        container-registry-username: ${{ secrets.acr_anuragContainerWebAppacr_username }}
+        container-registry-password: ${{ secrets.acr_anuragContainerWebAppacr_password }}
+        secret-name: anchauhakscldockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: anchauhakscluster5cfb
+        manifests: |
+          manifests/deployment-23.yml
+          manifests/service-22.yml
+        images: |
+          anuragcontainerwebappacr.azurecr.io/anchauhakscluster32e2:${{ parts[0] }}
+        imagepullsecrets: |
+          anchauhakscldockerauth
