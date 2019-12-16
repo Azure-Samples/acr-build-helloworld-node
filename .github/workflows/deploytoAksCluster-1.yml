@@ -40,8 +40,7 @@ jobs:
       with:
         namespace: anchauhakscluster3ef9
         manifests: |
-          manifests/deployment-1.yml
-          manifests/service-1.yml
+          manifests/deployment-1.yml manifests/service-1.yml
         images: |
           anuragcontainerwebappacr.azurecr.io/anchauhakscluster6e27:${{ github.sha }}
         imagepullsecrets: |
