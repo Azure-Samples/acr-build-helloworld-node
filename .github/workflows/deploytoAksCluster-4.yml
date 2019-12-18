@@ -1,4 +1,5 @@
 on: [push]
+name: azureaks
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
