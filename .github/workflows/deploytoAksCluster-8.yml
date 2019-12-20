@@ -1,0 +1,58 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+   - name: Create ACR
+      id: create-acr
+      run: |
+        az acr create -n  -g anuragDevOpsaks-rg --location  --sku  --admin-enabled
+        echo "::set-output name=acr_username::`az acr credential show -n  --query username`"
+        echo "::set-output name=acr_passwrod::`az acr credential show -n  --query passwords[0].value`"
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: .azurecr.io
+        username: ${{ steps.create-acr.outputs.acr_username }}
+        password: ${{ steps.create-acr.outputs.acr_password }}
+
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build . -t .azurecr.io/anchauhakscluster0983:${{ github.sha }}
+        docker push .azurecr.io/anchauhakscluster0983:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      id: login
+      with:
+         kubeconfig: ${{ secrets.aks_anchauhAksCluster_kubeConfig }}
+    
+    - name: create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep anchauhaksclusterfcc7 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace anchauhaksclusterfcc7`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: anchauhaksclusterfcc7
+        container-registry-url: .azurecr.io
+        container-registry-username: ${{ steps.create-acr.outputs.acr_username }}
+        container-registry-password:  ${{ steps.create-acr.outputs.acr_password }}
+        secret-name: anchauhakscldockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: anchauhaksclusterfcc7
+        manifests: |
+          manifests/deployment-7.yml
+          manifests/service-7.yml
+          manifests/ingress-2.yml
+        images: |
+          .azurecr.io/anchauhakscluster0983:${{ github.sha }}
+        imagepullsecrets: |
+          anchauhakscldockerauth
