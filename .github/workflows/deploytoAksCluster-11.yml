@@ -1,0 +1,51 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: anuragcontainerwebappacr.azurecr.io
+        username: ${{ secrets.acr_anuragContainerWebAppacr_username }}
+        password: ${{ secrets.acr_anuragContainerWebAppacr_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build . -t anuragcontainerwebappacr.azurecr.io/anchauhaksclusterd055:${{ github.sha }}
+        docker push anuragcontainerwebappacr.azurecr.io/anchauhaksclusterd055:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_anchauhAksCluster_kubeConfig }}
+      id: login
+    
+    - name: create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep anchauhakscluster7072 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace anchauhakscluster7072`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: anchauhakscluster7072
+        container-registry-url: anuragcontainerwebappacr.azurecr.io
+        container-registry-username: ${{ secrets.acr_anuragContainerWebAppacr_username }}
+        container-registry-password: ${{ secrets.acr_anuragContainerWebAppacr_password }}
+        secret-name: anchauhakscldockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: anchauhakscluster7072
+        manifests: |
+          manifests/deployment-12.yml
+          manifests/service-12.yml
+          manifests/ingress-7.yml
+        images: |
+          anuragcontainerwebappacr.azurecr.io/anchauhaksclusterd055:${{ github.sha }}
+        imagepullsecrets: |
+          anchauhakscldockerauth
