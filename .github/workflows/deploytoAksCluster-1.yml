@@ -13,7 +13,7 @@ jobs:
     - name: Create ACR
       id: create-acr
       run: |
-        az acr create -n anunewacr -g anuragDevOpsaks-rg --location East US --sku Standard --admin-enabled
+        az acr create -n anunewacr -g anuragDevOpsaks-rg --location "East US" --sku Standard --admin-enabled
         echo "::set-output name=acr_username::`az acr credential show -n anunewacr --query username`"
         echo "::set-output name=acr_passwrod::`az acr credential show -n anunewacr --query passwords[0].value`"
 
