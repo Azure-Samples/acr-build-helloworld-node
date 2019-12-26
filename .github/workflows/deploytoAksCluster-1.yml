@@ -15,8 +15,8 @@ jobs:
       id: create-acr
       run: |
         az acr create -n anunewacr -g anuragDevOpsaks-rg --location "East US" --sku Standard --admin-enabled
-        echo "::add-mask::set-output name=acr_username::`az acr credential show -n anunewacr --query username | xargs`"
-        echo "::add-mask::set-output name=acr_password::`az acr credential show -n anunewacr --query passwords[0].value | xargs`"
+        echo "::set-output ::add-mask::name=acr_username::`az acr credential show -n anunewacr --query username | xargs`"
+        echo "::set-output ::add-mask::name=acr_password::`az acr credential show -n anunewacr --query passwords[0].value | xargs`"
 
     - uses: azure/docker-login@v1
       with:
