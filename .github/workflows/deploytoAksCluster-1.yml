@@ -6,6 +6,10 @@ jobs:
     
     - uses: actions/checkout@master
     
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Create ACR
       id: create-acr
       run: |
