@@ -14,9 +14,15 @@ jobs:
       id: create-acr
       run: |
         az acr create -n anunewacr -g anuragDevOpsaks-rg --location "East US" --sku Standard --admin-enabled
-        echo "::set-output name=acr_username::`az acr credential show -n anunewacr --query username`"
-        echo "::set-output name=acr_password::`az acr credential show -n anunewacr --query passwords[0].value`"
+        echo "::set-env name=acr_username::`az acr credential show -n anunewacr --query username`"
+        echo "::set-env name=acr_password::`az acr credential show -n anunewacr --query passwords[0].value`"
 
+    - uses: azure/docker-login@v1
+      with:
+        login-server: anunewacr.azurecr.io
+        username: $acr_username
+        password: $acr_password
+    
     - name: Build and push image to ACR
       id: build-image
       run: |
