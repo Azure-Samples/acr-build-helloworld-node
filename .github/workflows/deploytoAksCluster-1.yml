@@ -15,14 +15,14 @@ jobs:
       id: create-acr
       run: |
         az acr create -n anunewacr -g anuragDevOpsaks-rg --location "East US" --sku Standard --admin-enabled
-        echo "::set-env name=acr_username::`az acr credential show -n anunewacr --query username | xargs`"
-        echo "::set-env name=acr_password::`az acr credential show -n anunewacr --query passwords[0].value | xargs`"
+        echo "::set-output name=acr_username::`az acr credential show -n anunewacr --query username | xargs`"
+        echo "::set-output name=acr_password::`az acr credential show -n anunewacr --query passwords[0].value | xargs`"
 
     - uses: azure/docker-login@v1
       with:
         login-server: anunewacr.azurecr.io
-        username: ${{ env.acr_username }}
-        password: ${{ env.acr_password }}
+        username: ${{ steps.create-acr.outputs.acr_username }}
+        password: ${{ steps.create-acr.outputs.acr_password }}
     
     - name: Build and push image to ACR
       id: build-image
@@ -47,8 +47,8 @@ jobs:
       with:
         namespace: anchauhaksclusterd1f6
         container-registry-url: anunewacr.azurecr.io
-        container-registry-username: $acr_password
-        container-registry-password: $acr_password
+        container-registry-username: ${{ steps.create-acr.outputs.acr_username }}
+        container-registry-password: ${{ steps.create-acr.outputs.acr_password }}
         secret-name: anchauhakscldockerauth
        
     - uses: azure/k8s-deploy@v1
