@@ -21,7 +21,7 @@ jobs:
     - uses: azure/docker-login@v1
       with:
         login-server: anunewacr.azurecr.io
-        username: ${{ steps.create-acr.outputs.acr_username }}
+        username: echo "::add-mask::${{ steps.create-acr.outputs.acr_username }}"
         password: ${{ steps.create-acr.outputs.acr_password }}
     
     - name: Build and push image to ACR
