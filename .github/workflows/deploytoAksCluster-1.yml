@@ -24,7 +24,7 @@ jobs:
         login-server: anunewacr.azurecr.io
       env:
         username: ${{ secrets.acr_username }}
-        password: ${{ secrets.acr_password }}
+        password: ${{ steps.create-acr.outputs.acr_password }}
     
     - name: Build and push image to ACR
       id: build-image
