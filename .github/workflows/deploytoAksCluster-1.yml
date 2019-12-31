@@ -29,7 +29,8 @@ jobs:
     - name: Build and push image to ACR
       id: build-image
       run: |
-        docker build / -f "Dockerfile" -t anunewacr.azurecr.io/anchauhakscluster58df:${{ github.sha }}
+        echo $GITHUB_WORKSPACE
+        docker build $GITHUB_WORKSPACE/ -f "Dockerfile" -t anunewacr.azurecr.io/anchauhakscluster58df:${{ github.sha }}
         docker push anunewacr.azurecr.io/anchauhakscluster58df:${{ github.sha }}
     
     - uses: azure/k8s-set-context@v1
