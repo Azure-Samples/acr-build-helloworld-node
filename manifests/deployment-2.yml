@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: "anchauhakscluster"
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: "anchauhakscluster"
+    spec:
+      containers:
+        - name: "anchauhakscluster"
+          image: ".azurecr.io/anchauhakscluster2545"
+          ports:
+          - containerPort: 80
