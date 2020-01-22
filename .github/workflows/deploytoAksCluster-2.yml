@@ -1,0 +1,51 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: anuragcontainerwebappacr.azurecr.io
+        username: ${{ secrets.acr_anuragContainerWebAppacr_username }}
+        password: ${{ secrets.acr_anuragContainerWebAppacr_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/Application" -f  "Application/Dockerfile" -t anuragcontainerwebappacr.azurecr.io/bugbash162276f0:${{ github.sha }}
+        docker push anuragcontainerwebappacr.azurecr.io/bugbash162276f0:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_bugbash162-2_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep bugbash1622a3f9 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace bugbash1622a3f9`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: bugbash1622a3f9
+        container-registry-url: anuragcontainerwebappacr.azurecr.io
+        container-registry-username: ${{ secrets.acr_anuragContainerWebAppacr_username }}
+        container-registry-password: ${{ secrets.acr_anuragContainerWebAppacr_password }}
+        secret-name: bugbash1622dockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: bugbash1622a3f9
+        manifests: |
+          manifests/deployment-3.yml
+          manifests/service-3.yml
+          manifests/ingress-3.yml
+        images: |
+          anuragcontainerwebappacr.azurecr.io/bugbash162276f0:${{ github.sha }}
+        imagepullsecrets: |
+          bugbash1622dockerauth
