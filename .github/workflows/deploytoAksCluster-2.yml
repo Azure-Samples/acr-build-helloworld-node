@@ -1,0 +1,64 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - uses: actions/checkout@master
+    
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.azureCredentials }}
+
+    - name: Create ACR
+      id: create-acr
+      run: |
+        az acr create -n kodeyGitHubAcr -g bugbash162 --location "South Central US" --sku Standard --admin-enabled
+        echo "::set-output name=acr_username::`az acr credential show -n kodeyGitHubAcr --query username | xargs`"
+        echo "::set-output name=acr_passwrod::`az acr credential show -n kodeyGitHubAcr --query passwords[0].value | xargs`"
+        echo "::add-mask::`az acr credential show -n kodeyGitHubAcr --query passwords[0].value | xargs`"
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: kodeygithubacr.azurecr.io
+        username: ${{ steps.create-acr.outputs.acr_username }}
+        password: ${{ steps.create-acr.outputs.acr_password }}
+
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t kodeygithubacr.azurecr.io/bugbash16223569:${{ github.sha }}
+        docker push kodeygithubacr.azurecr.io/bugbash16223569:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      id: login
+      with:
+         kubeconfig: ${{ secrets.aks_bugbash162-2_kubeConfig }}
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep bugbash1622758c | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace bugbash1622758c`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: bugbash1622758c
+        container-registry-url: kodeygithubacr.azurecr.io
+        container-registry-username: ${{ steps.create-acr.outputs.acr_username }}
+        container-registry-password: ${{ steps.create-acr.outputs.acr_password }}
+        secret-name: bugbash1622dockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: bugbash1622758c
+        manifests: |
+          manifests/deployment-14.yml
+          manifests/service-14.yml
+          manifests/ingress-14.yml
+        images: |
+          kodeygithubacr.azurecr.io/bugbash16223569:${{ github.sha }}
+        imagepullsecrets: |
+          bugbash1622dockerauth
