@@ -11,11 +11,11 @@ jobs:
         username: ${{ secrets.acr_abhisheaacr_username }}
         password: ${{ secrets.acr_abhisheaacr_password }}
     
-    - name: Build and push image to ACR
-      id: build-image
-      run: |
-        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t abhisheaacr.azurecr.io/demotest:${{ github.sha }}
-        docker push abhisheaacr.azurecr.io/demotest:${{ github.sha }}
+#     - name: Build and push image to ACR
+#       id: build-image
+#       run: |
+#         docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t abhisheaacr.azurecr.io/demotest:${{ github.sha }}
+#         docker push abhisheaacr.azurecr.io/demotest:${{ github.sha }}
     
     - uses: azure/k8s-set-context@v1
       with:
