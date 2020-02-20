@@ -16,6 +16,7 @@ jobs:
       run: |
         docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t abhisheaacr.azurecr.io/bugbash1622:${{ github.sha }}
         docker push abhisheaacr.azurecr.io/bugbash1622:${{ github.sha }}
+        echo "good to go"
     
     - uses: azure/k8s-set-context@v1
       with:
