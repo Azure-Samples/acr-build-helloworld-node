@@ -1,0 +1,58 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    env:
+      REGISTRY_URL: asdsadacr.azurecr.io
+      NAMESPACE: vscodebugbash1bfa7
+      IMAGE_NAME: vscodebugbash1
+      SECRET_NAME: vscodebugbas
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.REGISTRY_URL }}
+        username: ${{ secrets.asdsadacr_22b89_username }} 
+        password: ${{ secrets.asdsadacr_22b89_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/." -f  "./Dockerfile" -t  $REGISTRY_URL/$IMAGE_NAME:${{ github.sha }}
+        docker push $REGISTRY_URL/$IMAGE_NAME:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.vscodebugbash1_22b89 }} 
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep $NAMESPACE | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace $NAMESPACE`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: ${{ env.NAMESPACE  }}
+        container-registry-url: ${{ env.REGISTRY_URL }}
+        container-registry-username: ${{ secrets.asdsadacr_22b89_username }}
+        container-registry-password: ${{ secrets.asdsadacr_22b89_password }}
+        secret-name: ${{ env.SECRET_NAME  }}
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: ${{ env.NAMESPACE  }}
+        manifests: |
+          manifests/deployment (1).yml
+          manifests/service (1).yml
+          
+
+        images: |
+          ${{ env.REGISTRY_URL }}/${{ env.IMAGE_NAME  }}:${{ github.sha }}
+        imagepullsecrets: |
+          ${{ env.SECRET_NAME  }}
