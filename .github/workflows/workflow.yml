@@ -23,3 +23,13 @@ jobs:
     - run: |
         docker build . -t actiontest.azurecr.io/nodejssampleapp:${{ github.sha }}
         docker push actiontest.azurecr.io/nodejssampleapp:${{ github.sha }}
+    - name: 'Deploy to Azure Container Instances'
+      uses: 'azure/aci-deploy-action@v1'
+      with:
+        resource-group: actiontest
+        dns-name-label: actiontest01
+        image: actiontest.azurecr.io/nodejssampleapp:${{ github.sha }}
+        registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        name: acitest
+        location: 'west us'
