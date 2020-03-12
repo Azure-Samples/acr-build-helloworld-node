@@ -25,7 +25,6 @@ jobs:
         docker build . -t actiontest.azurecr.io/nodejssampleapp:${{ github.sha }}
         docker push actiontest.azurecr.io/nodejssampleapp:${{ github.sha }}
     - name: 'Deploy to Azure Container Instances'
-      
       uses: 'azure/aci-deploy-action@v1'
       with:
         resource-group: actiontest
