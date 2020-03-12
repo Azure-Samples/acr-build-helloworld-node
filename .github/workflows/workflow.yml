@@ -10,4 +10,4 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - run: |
-        az acr show -n actiontest
+        az acr list -g actiontest
