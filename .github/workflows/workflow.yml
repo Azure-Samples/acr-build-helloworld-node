@@ -6,8 +6,17 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      # checkout the repo
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@master
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/docker-login@v1
+      with:
+        login-server: actiontest.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        az acr list -g actiontest
+        docker build .t actiontest.azurecr.io/nodejssampleapp:${{ github.sha }}
+        docker push actiontest.azurecr.io/nodejssampleapp:${{ github.sha }}
