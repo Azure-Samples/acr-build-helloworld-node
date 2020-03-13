@@ -30,7 +30,7 @@ jobs:
         resource-group: actiontest
         dns-name-label: actiontest01
         image: actiontest.azurecr.io/nodejssampleapp:${{ github.sha }}
-        login-server: actiontest.azurecr.io
+        server: actiontest.azurecr.io
         registry-username: ${{ secrets.REGISTRY_USERNAME }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         name: acitest
