@@ -25,7 +25,7 @@ jobs:
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
 
         - name: 'Deploy to Azure Container Instances'
-          uses: 'azure/aci-deploy-action@v1'
+          uses: 'mitsha-microsoft/aci-create-action@v1'
           with:
             resource-group: ${{ secrets.REGISTRY_RESOURCE_GROUP }}
             dns-name-label: ${{ secrets.REGISTRY_RESOURCE_GROUP }}
