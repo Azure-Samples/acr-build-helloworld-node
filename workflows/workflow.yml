@@ -32,5 +32,5 @@ jobs:
             image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: aci-sampleapp
+            name: my-sampleapp
             location: 'west us'
