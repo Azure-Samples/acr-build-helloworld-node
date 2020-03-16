@@ -27,8 +27,8 @@ jobs:
         - name: 'Deploy to Azure Container Instances'
           uses: 'mitsha-microsoft/aci-create-action@v1'
           with:
-            resource-group: danlep0316
-            dns-name-label: danlep0316
+            resource-group: ${{ secrets.RESOURCE_GROUP }}
+            dns-name-label: ${{ secrets.RESOURCE_GROUP }}
             image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
             registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}  
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
