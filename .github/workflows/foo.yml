@@ -29,4 +29,4 @@ jobs:
           with:
             azcliversion: 2.0.77
             inlineScript: |
-              az container create --resource-group danlep0316 --name acr-build-helloworld-node --image danlep0316.azurecr.io/acr-build-helloworld-node:${{ github.sha }} --ports 80 8080 --dns-name-label acr-build-helloworld-node --registry-username ${{ SECRETS.REGISTRY_USERNAME }} --registry-password ${{ SECRETS.REGISTRY_PASSWORD }}
+              az container create --resource-group danlep0316 --name acr-build-helloworld-node --image danlep0316.azurecr.io/acr-build-helloworld-node:${{ github.sha }} --ports 80 8080 --dns-name-label acr-build-helloworld-node01 --registry-username ${{ SECRETS.REGISTRY_USERNAME }} --registry-password ${{ SECRETS.REGISTRY_PASSWORD }}
