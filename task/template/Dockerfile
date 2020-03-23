@@ -1,1 +1,1 @@
-FROM dlepow/hello-world
+FROM hello-world
