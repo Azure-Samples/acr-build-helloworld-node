@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: "anchauhtestaks"
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: "anchauhtestaks"
+    spec:
+      containers:
+        - name: "anchauhtestaks"
+          image: "abhisheaacr.azurecr.io/anchauhtestaks"
+          ports:
+          - containerPort: 80
