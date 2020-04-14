@@ -1,0 +1,51 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: akstest2acr.azurecr.io
+        username: ${{ secrets.acr_akstest2acr_username }}
+        password: ${{ secrets.acr_akstest2acr_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t akstest2acr.azurecr.io/anchauhtestaks:${{ github.sha }}
+        docker push akstest2acr.azurecr.io/anchauhtestaks:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_anchauhtestaks_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep anchauhtestaksb80f | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace anchauhtestaksb80f`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: anchauhtestaksb80f
+        container-registry-url: akstest2acr.azurecr.io
+        container-registry-username: ${{ secrets.acr_akstest2acr_username }}
+        container-registry-password: ${{ secrets.acr_akstest2acr_password }}
+        secret-name: anchauhtestadockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: anchauhtestaksb80f
+        manifests: |
+          manifests/deployment-16.yml
+          manifests/service-16.yml
+          manifests/ingress-8.yml
+        images: |
+          akstest2acr.azurecr.io/anchauhtestaks:${{ github.sha }}
+        imagepullsecrets: |
+          anchauhtestadockerauth
