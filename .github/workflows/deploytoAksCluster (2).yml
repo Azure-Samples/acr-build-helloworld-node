@@ -1,0 +1,49 @@
+on: [push]
+        jobs:
+          build-and-deploy:
+            runs-on: ubuntu-latest
+            steps:
+            - uses: actions/checkout@master
+            
+            - uses: azure/docker-login@v1
+              with:
+                login-server: anchauhssdacr.azurecr.io
+                username: $
+                password: $
+            
+            - name: Build and push image to ACR
+              id: build-image
+              run: |
+                docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t anchauhssdacr.azurecr.io/anchauhTestAks509d59:$
+                docker push anchauhssdacr.azurecr.io/anchauhTestAks509d59:$
+            
+            - uses: azure/k8s-set-context@v1
+              with:
+                 kubeconfig: $
+              id: login
+            
+            - name: Create namespace
+              run: |
+                namespacePresent=`kubectl get namespace | grep anchauhTestAks50999c | wc - l`
+                if [ $namespacePresent -eq 0 ]
+                then
+                    echo `kubectl create namespace anchauhTestAks50999c `
+                fi
+        
+            - uses: azure/k8s-create-secret@v1
+              with:
+                namespace: anchauhTestAks50999c
+                container-registry-url: anchauhssdacr.azurecr.io
+                container-registry-username: $
+                container-registry-password: $
+                secret-name: anchauhTestAks12dockerauth
+               
+            - uses: azure/k8s-deploy@v1
+              with:
+                namespace: anchauhTestAks50999c
+                manifests: |
+                  assets.deploymentFile
+                images: |
+                  anchauhssdacr.azurecr.io/anchauhTestAks509d59:$
+                imagepullsecrets: |
+                  anchauhTestAks12dockerauth
