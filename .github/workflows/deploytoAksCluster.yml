@@ -1,0 +1,50 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: abhisheaacr.azurecr.io
+        username: ${{ secrets.acr_abhisheaacr_username }}
+        password: ${{ secrets.acr_abhisheaacr_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t abhisheaacr.azurecr.io/bugbash1621:${{ github.sha }}
+        docker push abhisheaacr.azurecr.io/bugbash1621:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_bugbash1621_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep bugbash162151a3 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace bugbash162151a3`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: bugbash162151a3
+        container-registry-url: abhisheaacr.azurecr.io
+        container-registry-username: ${{ secrets.acr_abhisheaacr_username }}
+        container-registry-password: ${{ secrets.acr_abhisheaacr_password }}
+        secret-name: bugbash1621dockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: bugbash162151a3
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          abhisheaacr.azurecr.io/bugbash1621:${{ github.sha }}
+        imagepullsecrets: |
+          bugbash1621dockerauth
