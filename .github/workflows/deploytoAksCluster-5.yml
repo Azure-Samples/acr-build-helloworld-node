@@ -1,0 +1,51 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: acr2ac5ef2vrjdac.azurecr.io
+        username: ${{ secrets.acr_acr2ac5ef2vrjdac_username }}
+        password: ${{ secrets.acr_acr2ac5ef2vrjdac_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/Do - cker" -f  "Do - cker/Dockerfile" -t acr2ac5ef2vrjdac.azurecr.io/askbugbash:${{ github.sha }}
+        docker push acr2ac5ef2vrjdac.azurecr.io/askbugbash:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_askbugbash_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep askbugbash64a0 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace askbugbash64a0`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: askbugbash64a0
+        container-registry-url: acr2ac5ef2vrjdac.azurecr.io
+        container-registry-username: ${{ secrets.acr_acr2ac5ef2vrjdac_username }}
+        container-registry-password: ${{ secrets.acr_acr2ac5ef2vrjdac_password }}
+        secret-name: askbugbashdockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: askbugbash64a0
+        manifests: |
+          manifests/deployment-5.yml
+          manifests/service-5.yml
+          manifests/ingress.yml
+        images: |
+          acr2ac5ef2vrjdac.azurecr.io/askbugbash:${{ github.sha }}
+        imagepullsecrets: |
+          askbugbashdockerauth
