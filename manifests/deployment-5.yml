@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: "askbugbash-f015"
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: "askbugbash-f015"
+    spec:
+      containers:
+        - name: "askbugbash-f015"
+          image: "acr2ac5ef2vrjdac.azurecr.io/askbugbash"
+          ports:
+          - containerPort: 80
