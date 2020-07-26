@@ -1,0 +1,51 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: akstest3acr.azurecr.io
+        username: ${{acr_akstest3acr_username}}
+        password: ${{acr_akstest3acr_password}}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/Do - cker" -f  "Do - cker/Dockerfile" -t akstest3acr.azurecr.io/bugbash162252fd:${{}}
+        docker push akstest3acr.azurecr.io/bugbash162252fd:${{}}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{aks_bugbash162-2_kubeConfig}}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep bugbash1622fc07 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace bugbash1622fc07`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: bugbash1622fc07
+        container-registry-url: akstest3acr.azurecr.io
+        container-registry-username: ${{acr_akstest3acr_username}}
+        container-registry-password: ${{acr_akstest3acr_password}}
+        secret-name: bugbash1622dockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: bugbash1622fc07
+        manifests: |
+          manifests/deployment-1234.yml
+          manifests/service-1234.yml
+          manifests/ingress-1234.yml
+        images: |
+          akstest3acr.azurecr.io/bugbash162252fd:${{}}
+        imagepullsecrets: |
+          bugbash1622dockerauth
