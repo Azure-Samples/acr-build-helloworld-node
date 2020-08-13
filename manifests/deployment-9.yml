@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: "bugbash1622-1907"
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: "bugbash1622-1907"
+    spec:
+      containers:
+        - name: "bugbash1622-1907"
+          image: "acrbmwniv2zczfvu.azurecr.io/bugbash1622"
+          ports:
+          - containerPort: 80
