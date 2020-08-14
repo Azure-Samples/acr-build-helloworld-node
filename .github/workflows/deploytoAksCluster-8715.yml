@@ -1,0 +1,50 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: diaggarw.azurecr.io
+        username: ${{secrets.acr_diaggarw_username}}
+        password: ${{secrets.acr_diaggarw_password}}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t diaggarw.azurecr.io/diaggarwc74d:${{}}
+        docker push diaggarw.azurecr.io/diaggarwc74d:${{}}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{secrets.aks_diaggarw_kubeConfig}}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep diaggarw1003 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace diaggarw1003`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: diaggarw1003
+        container-registry-url: diaggarw.azurecr.io
+        container-registry-username: ${{secrets.acr_diaggarw_username}}
+        container-registry-password: ${{secrets.acr_diaggarw_password}}
+        secret-name: diaggarwdockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: diaggarw1003
+        manifests: |
+          
+          
+        images: |
+          diaggarw.azurecr.io/diaggarwc74d:${{}}
+        imagepullsecrets: |
+          diaggarwdockerauth
