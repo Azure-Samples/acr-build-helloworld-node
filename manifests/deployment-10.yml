@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: "diaggarwtest-cf3f"
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: "diaggarwtest-cf3f"
+    spec:
+      containers:
+        - name: "diaggarwtest-cf3f"
+          image: "akstest3acr.azurecr.io/diaggarwtest"
+          ports:
+          - containerPort: 80
