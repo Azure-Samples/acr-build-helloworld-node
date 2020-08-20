@@ -1,8 +1,11 @@
-apiVersion : apps/v1beta1
+apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: "diaggarwtest-9566"
 spec:
+  selector:
+    matchLabels:
+      app: "diaggarwtest-9566"
   replicas: 2
   template:
     metadata:
