@@ -14,7 +14,7 @@ jobs:
     - name: Build and push image to ACR
       id: build-image
       run: |
-        docker build "$GITHUB_WORKSPACE/Do - cker" -f  "Do - cker/Dockerfile" -t akstest3acr.azurecr.io/diaggarwtest654f:${{github.sha}}
+        docker build "$GITHUB_WORKSPACE/Do - cker" -f  "Dockerfile" -t akstest3acr.azurecr.io/diaggarwtest654f:${{github.sha}}
         docker push akstest3acr.azurecr.io/diaggarwtest654f:${{github.sha}}
     
     - uses: azure/k8s-set-context@v1
