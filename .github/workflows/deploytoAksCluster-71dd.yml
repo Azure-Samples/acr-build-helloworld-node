@@ -36,7 +36,7 @@ jobs:
         container-registry-url: akstest3acr.azurecr.io
         container-registry-username: ${{secrets.acr_akstest3acr_username}}
         container-registry-password: ${{secrets.acr_akstest3acr_password}}
-        secret-name: diaggarwtestdockerauth
+        secret-name: diaggarwtestdockerauth1
        
     - uses: azure/k8s-deploy@v1
       with:
