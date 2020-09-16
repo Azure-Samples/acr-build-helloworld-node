@@ -4,8 +4,8 @@ metadata:
   name: "diaggarwtest-b893"
 spec:
   selector:
-    matchLabels: "diaggarwtest-b893"
-      app: ""
+    matchLabels:
+      app: "diaggarwtest-b893"
   replicas: 2
   template:
     metadata:
