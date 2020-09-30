@@ -14,8 +14,8 @@ jobs:
     - name: Build and push image to ACR
       id: build-image
       run: |
-        docker build "$GITHUB_WORKSPACE/" -f  "Do - cker/Dockerfile" -t akstest3acr.azurecr.io/diaggarwtesteb39:${{github.sha}}
-        docker push akstest3acr.azurecr.io/diaggarwtesteb39:${{github.sha}}
+        docker build "$GITHUB_WORKSPACE/Do - cker" -f  "Do - cker/Dockerfile" -t akstest3acr.azurecr.io/diaggarwtest8c12:${{github.sha}}
+        docker push akstest3acr.azurecr.io/diaggarwtest8c12:${{github.sha}}
     
     - uses: azure/k8s-set-context@v1
       with:
@@ -24,15 +24,15 @@ jobs:
     
     - name: Create namespace
       run: |
-        namespacePresent=`kubectl get namespace | grep diaggarwtest5dd5 | wc -l`
+        namespacePresent=`kubectl get namespace | grep diaggarwtest64c0 | wc -l`
         if [ $namespacePresent -eq 0 ]
         then
-            echo `kubectl create namespace diaggarwtest5dd5`
+            echo `kubectl create namespace diaggarwtest64c0`
         fi
 
     - uses: azure/k8s-create-secret@v1
       with:
-        namespace: diaggarwtest5dd5
+        namespace: diaggarwtest64c0
         container-registry-url: akstest3acr.azurecr.io
         container-registry-username: ${{secrets.acr_akstest3acr_username}}
         container-registry-password: ${{secrets.acr_akstest3acr_password}}
@@ -40,11 +40,11 @@ jobs:
        
     - uses: azure/k8s-deploy@v1
       with:
-        namespace: diaggarwtest5dd5
+        namespace: diaggarwtest64c0
         manifests: |
-          manifests/deployment-4abb.yml
-          manifests/service-4abb.yml
+          manifests/deployment-d607.yml
+          manifests/service-d607.yml
         images: |
-          akstest3acr.azurecr.io/diaggarwtesteb39:${{github.sha}}
+          akstest3acr.azurecr.io/diaggarwtest8c12:${{github.sha}}
         imagepullsecrets: |
           diaggarwtestdockerauth

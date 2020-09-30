@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "diaggarwtest-6a0c"
+spec:
+  selector:
+    matchLabels:
+      app: "diaggarwtest-6a0c"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: "diaggarwtest-6a0c"
+    spec:
+      containers:
+        - name: "diaggarwtest-6a0c"
+          image: "akstest3acr.azurecr.io/diaggarwtest8c12"
+          ports:
+          - containerPort: 80
