@@ -1,0 +1,50 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: akstest3acr.azurecr.io
+        username: ${{ secrets.acr_akstest3acr_username }}
+        password: ${{ secrets.acr_akstest3acr_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Do - cker/Dockerfile" -t akstest3acr.azurecr.io/petestaks:${{ github.sha }}
+        docker push akstest3acr.azurecr.io/petestaks:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_petestaks_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep petest-aks9538 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace petest-aks9538`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: petest-aks9538
+        container-registry-url: akstest3acr.azurecr.io
+        container-registry-username: ${{ secrets.acr_akstest3acr_username }}
+        container-registry-password: ${{ secrets.acr_akstest3acr_password }}
+        secret-name: petestaksdockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: petest-aks9538
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          akstest3acr.azurecr.io/petestaks:${{ github.sha }}
+        imagepullsecrets: |
+          petestaksdockerauth
