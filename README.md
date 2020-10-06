@@ -1,4 +1,4 @@
-# ACR Build Hello World
+# ACR Build HEllo World
 
 This Node.js application is for use in demonstrating Azure Container Registry Build (ACR Build), a suite of features within [Azure Container Registry](https://azure.microsoft.com/services/container-registry/) for performing Docker container builds on [Azure](https://azure.com).
 
