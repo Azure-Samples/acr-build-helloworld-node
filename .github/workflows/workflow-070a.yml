@@ -1,0 +1,49 @@
+# Node.js with Grunt on Linux Web App
+# Build a Node.js project using the Grunt task runner and deploy it to Azure as a Linux web app.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+
+on:
+  push:
+    branches:
+      - master
+
+name: Build and deploy Node.js with Grunt on Linux Web App
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # checkout the repo
+    - uses: actions/checkout@master
+
+    # login using azure credentials
+    - uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS_GITHUB_SECRET_070a}}
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+
+    # install dependencies, build, and test
+    - name: npm install, build
+      working-directory: .
+      run: |
+        npm install
+        grunt --gruntfile gruntfile.js
+
+    - uses: azure/appservice-settings@v1
+      with:
+        app-name: testLinuxWebApp
+        general-settings-json: '{"linuxFxVersion": "LTS"}' #'General configuration settings as Key Value pairs'
+
+    # deploy web app
+    - uses: azure/webapps-deploy@v1
+      with:
+        app-name: testLinuxWebApp
+        package: .
+
+    # Azure logout
+    - name: logout
+      run: |
+        az logout
