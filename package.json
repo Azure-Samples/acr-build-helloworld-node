@@ -1,7 +1,7 @@
 {
   "name": "helloworld",
   "version": "1.0.0",
-  "description": "Sample app for ACR Build",
+  "description": "PR Sample app for ACR Build",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
