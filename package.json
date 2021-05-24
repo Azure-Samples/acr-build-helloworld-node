@@ -7,5 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "node server.js"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "react": "ajax"
 }
