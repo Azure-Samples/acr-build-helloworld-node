@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "ajayaks12321-c311"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "ajayaks12321-c311"
+  template:
+    metadata:
+      labels:
+        app: "ajayaks12321-c311"
+    spec:
+      containers:
+        - name: "ajayaks12321-c311"
+          image: "aaaatiwarishubregistry.azurecr.io/ajayaks12321"
+          ports:
+          - containerPort: 80
