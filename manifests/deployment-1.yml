@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "akstest3-0b4c"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "akstest3-0b4c"
+  template:
+    metadata:
+      labels:
+        app: "akstest3-0b4c"
+    spec:
+      containers:
+        - name: "akstest3-0b4c"
+          image: "aaaatiwarishubregistry.azurecr.io/akstest3"
+          ports:
+          - containerPort: 80

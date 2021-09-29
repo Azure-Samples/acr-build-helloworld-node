@@ -1,0 +1,50 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: aksrivacr1.azurecr.io
+        username: ${{secrets.acr_aksrivacr1_username}}
+        password: ${{secrets.acr_aksrivacr1_password}}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/Do - cker" -f  "Do - cker/Dockerfile" -t aksrivacr1.azurecr.io/akskodey4af3:${{ github.sha }}
+        docker push aksrivacr1.azurecr.io/akskodey4af3:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{secrets.aks_akskodey_kubeConfig}}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep akskodey4af3 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace akskodey4af3`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: akskodey4af3
+        container-registry-url: aksrivacr1.azurecr.io
+        container-registry-username: ${{secrets.acr_aksrivacr1_username}}
+        container-registry-password: ${{secrets.acr_aksrivacr1_password}}
+        secret-name: akskodeydockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: akskodey4af3
+        manifests: |
+          Do - cker/manifests/deployment-4af3.yml
+          Do - cker/manifests/service-4af3.yml
+        images: |
+          aksrivacr1.azurecr.io/akskodey4af3:${{ github.sha }}
+        imagepullsecrets: |
+          akskodeydockerauth
