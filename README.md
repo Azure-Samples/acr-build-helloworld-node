@@ -4,14 +4,14 @@ languages:
 - javascript
 products:
 - azure
-description: "This Node.js application is for use in demonstrating scenarios for Azure Container Registry Tasks."
+Penjelasan: "Aplikasi ini untuk demo skenario running Azure Container Registy tasks."
 urlFragment: acr-build-helloworld-node
 ---
 
 
 # ACR Build Hello World
 
-This Node.js application is for use in demonstrating scenarios for Azure Container Registry Tasks. [ACR Tasks](https://docs.microsoft.com/azure/container-registry/container-registry-tasks-overview) is a suite of features within [Azure Container Registry](https://azure.microsoft.com/services/container-registry/) for performing Docker container builds on [Azure](https://azure.com), as well as automated OS and framework patching for Docker containers.
+Aplikasi ini untuk demo skenario running Azure Container Registy tasks. [ACR Tasks](https://docs.microsoft.com/azure/container-registry/container-registry-tasks-overview) adalah fitur yang terdapat pada [Azure Container Registry](https://azure.microsoft.com/services/container-registry/)Untuk melakukan Docker container builds pada [Azure](https://azure.com), dan juga meng-otomatisasi OS dan framework patching pada Docker Containers.
 
 ## Features
 
