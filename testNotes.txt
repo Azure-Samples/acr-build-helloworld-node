@@ -1,0 +1,45 @@
+
+# Start here - https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-task
+# End up here - https://docs.microsoft.com/en-us/azure/defender-for-cloud/defender-for-container-registries-usage
+
+# Run in Acure CloudShell CLI (Bash)
+ACR_NAME=[yourACRregistry]        # The name of your Azure container registry
+$GIT_USER=[yourUPN]      # Your GitHub user account name
+$GIT_PAT=[yourGitPAT] # The PAT you generated in the previous section
+
+
+az acr task create \
+    --registry $ACR_NAME \
+    --name taskhelloworld \
+    --image helloworld:{{.Run.ID}} \
+    --context https://github.com/$GIT_USER/acr-build-helloworld-node.git#main \
+    --file Dockerfile \
+    --git-access-token $GIT_PAT
+
+
+az acr task create \
+    --registry $ACR_NAME \
+    --name taskmultihelloworld \
+    --image helloworld:{{.Run.ID}} \
+    --context https://github.com/$GIT_USER/acr-build-helloworld-node.git#main \
+    --file taskmulti.yaml \
+    --git-access-token $GIT_PAT
+
+
+# https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update
+az acr task create \
+    --registry $ACR_NAME \
+    --name baseexample1 \
+    --image helloworld:{{.Run.ID}} \
+    --arg REGISTRY_NAME=$ACR_NAME.azurecr.io \
+    --context https://github.com/$GIT_USER/acr-build-helloworld-node.git#main \
+    --file Dockerfile-app \
+    --git-access-token $GIT_PAT
+
+
+# https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tasks-pack-build
+az acr pack build \
+    --registry $ACR_NAME \
+    --image node-app:1.0 \
+    --pull --builder cloudfoundry/cnb:cflinuxfs3 \
+    https://github.com/Azure-Samples/nodejs-docs-hello-world.git
