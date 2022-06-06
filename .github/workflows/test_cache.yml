@@ -1,0 +1,25 @@
+name: Test Compression
+on:
+  push:
+jobs:
+  build:
+    name: Build Test
+    strategy:
+      matrix:
+        runs-on: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/github-script@v5
+      with:
+        script: |
+          console.log("process.env['RUNNER_TEMP']="+process.env['RUNNER_TEMP']);
+          console.log("process.cwd()="+process.cwd());
+          console.log("Home directory = "+require('os').homedir());
+    - uses: kotewar/cache@36aafba6ae833174491b53e4004105473f2b5799
+      id: cache
+      with:
+        path: ~/
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
