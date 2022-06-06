@@ -6,7 +6,7 @@ jobs:
     name: Build Test
     strategy:
       matrix:
-        runs-on: [ubuntu-latest, windows-latest, macos-latest]
+        runs-on: [ubuntu-latest]
       fail-fast: false
     runs-on: ${{ matrix.runs-on }}
     steps:
@@ -21,5 +21,4 @@ jobs:
       id: cache
       with:
         path: ~/
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{github.sha}}
