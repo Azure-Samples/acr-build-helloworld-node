@@ -17,7 +17,7 @@ jobs:
           console.log("process.env['RUNNER_TEMP']="+process.env['RUNNER_TEMP']);
           console.log("process.cwd()="+process.cwd());
           console.log("Home directory = "+require('os').homedir());
-    - uses: kotewar/cache@36aafba6ae833174491b53e4004105473f2b5799
+    - uses: actions/cache@v3
       id: cache
       with:
         path: ~/
