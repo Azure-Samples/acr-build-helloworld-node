@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "akstutorial-5fc6"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "akstutorial-5fc6"
+  template:
+    metadata:
+      labels:
+        app: "akstutorial-5fc6"
+    spec:
+      containers:
+        - name: "akstutorial-5fc6"
+          image: "aadapptestacr.azurecr.io/akstutorial"
+          ports:
+          - containerPort: 80
