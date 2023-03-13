@@ -1,6 +1,3 @@
-FROM node:15-alpine
-
-COPY . /
-RUN cd /src && npm install
+FROM nginx
 EXPOSE 80
-CMD ["node", "/src/server.js"]
+
