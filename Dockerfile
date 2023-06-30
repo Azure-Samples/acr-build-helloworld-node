@@ -1,4 +1,4 @@
-FROM node:15-alpine
+FROM pspatelrg/baseimages/node:15-alpine
 
 COPY . /src
 RUN cd /src && npm install
