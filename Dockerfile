@@ -1,6 +1,6 @@
 FROM node:15-alpine
 
-COPY . /src
-RUN cd /src && npm install
+COPY . /fts
+RUN cd /fts && npm install
 EXPOSE 80
-CMD ["node", "/src/server.js"]
+CMD ["node", "/fts/server.js"]
